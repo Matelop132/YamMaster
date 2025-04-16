@@ -1,11 +1,11 @@
 // app/controller/online-game.controller.js
 
 import React, { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { SocketContext } from '../contexts/socket.context';
+import  Board  from '../components/board/board.component'
 
-
-export default function OnlineGameController() {
+export default function OnlineGameController({ navigation }) {
 
     const socket = useContext(SocketContext);
 
@@ -25,6 +25,19 @@ export default function OnlineGameController() {
             setInGame(data['inGame']);
         });
 
+        socket.on('queue.leave', (data) => {
+            console.log('[listen][game.start]:', data);
+            setInQueue(data['inQueue']);
+            setInGame(data['inGame']);
+            setIdOpponent(data['idOpponent']);
+        });
+        socket.on('queue.left', (data) => {
+            console.log('[listen][game.start]:', data);
+            setInQueue(data['inQueue']);
+            setInGame(data['inGame']);
+            navigation.navigate('HomeScreen')
+        });
+
         socket.on('game.start', (data) => {
             console.log('[listen][game.start]:', data);
             setInQueue(data['inQueue']);
@@ -33,7 +46,6 @@ export default function OnlineGameController() {
         });
 
     }, []);
-
     return (
         <View style={styles.container}>
             {!inQueue && !inGame && (
@@ -49,23 +61,16 @@ export default function OnlineGameController() {
                     <Text style={styles.paragraph}>
                         Waiting for another player...
                     </Text>
+                    <Button
+                        title="Revenir au menu"
+                        onPress={() => socket.emit("queue.leave")}
+                    />
                 </>
             )}
 
             {inGame && (
                 <>
-                    <Text style={styles.paragraph}>
-                        Game found !
-                    </Text>
-                    <Text style={styles.paragraph}>
-                        Player - {socket.id} -
-                    </Text>
-                    <Text style={styles.paragraph}>
-                        - vs -
-                    </Text>
-                    <Text style={styles.paragraph}>
-                        Player - {idOpponent} -
-                    </Text>
+                    <Board/>
                 </>
             )}
         </View>

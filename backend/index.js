@@ -31,6 +31,11 @@ const newPlayerInQueue = (socket) => {
   }
 };
 
+const removePlayerFromQueue = (playerSocker) => {
+  queue.shift();
+  playerSocker.emit('queue.left', GameService.send.forPlayer.viewLeaveQueueState())
+};
+
 const createGame = (player1Socket, player2Socket) => {
 
   const newGame = GameService.init.gameState();
@@ -39,6 +44,36 @@ const createGame = (player1Socket, player2Socket) => {
   newGame['player2Socket'] = player2Socket;
 
   games.push(newGame);
+
+  const gameInterval = setInterval(() => {
+
+    games[gameIndex].gameState.timer--;
+  
+    // Si le timer tombe à zéro
+    if (games[gameIndex].gameState.timer === 0) {
+  
+      // On change de tour en inversant le clé dans 'currentTurn'
+      games[gameIndex].gameState.currentTurn = games[gameIndex].gameState.currentTurn === 'player:1' ? 'player:2' : 'player:1';
+  
+      // Méthode du service qui renvoie la constante 'TURN_DURATION'
+      games[gameIndex].gameState.timer = GameService.timer.getTurnDuration();
+    }
+  
+    games[gameIndex].player1Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:1', games[gameIndex].gameState));
+    games[gameIndex].player2Socket.emit('game.timer', GameService.send.forPlayer.gameTimer('player:2', games[gameIndex].gameState));
+  
+    // On notifie finalement les clients que les données sont mises à jour.
+   
+  
+  }, 1000);
+  
+  player1Socket.on('disconnect', () => {
+    clearInterval(gameInterval);
+  });
+
+  player2Socket.on('disconnect', () => {
+    clearInterval(gameInterval);
+  });
 
   const gameIndex = GameService.utils.findGameIndexById(games, newGame.idGame);
 
@@ -56,6 +91,11 @@ io.on('connection', socket => {
   socket.on('queue.join', () => {
     console.log(`[${socket.id}] new player in queue `)
     newPlayerInQueue(socket);
+  });
+
+  socket.on('queue.leave', () => {
+    console.log(`[${socket.id}] player wants to leave queue `)
+    removePlayerFromQueue(socket);
   });
 
   socket.on('disconnect', reason => {
