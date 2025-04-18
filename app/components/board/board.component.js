@@ -4,6 +4,9 @@ import React from "react";
 import { View, Text, StyleSheet } from 'react-native';
 import PlayerTimer from './timer/player-timer.component'
 import OpponentTimer from './timer/opponent-timer.component'
+import PlayerDeck from './decks/player-deck.component'
+import OpponentDeck from './decks/opponent-deck.component'
+import Choices from "./choices/choices.component";
 
 const OpponentInfos = () => {
   return (
@@ -21,37 +24,13 @@ const OpponentScore = () => {
   );
 };
 
-const OpponentDeck = () => {
 
-  return (
-    <View style={styles.deckOpponentContainer}>
-      <Text>OpponentDeck</Text>
-    </View>
-  );
-};
 
 const Grid = () => {
 
   return (
     <View style={styles.gridContainer}>
       <Text>Grid</Text>
-    </View>
-  );
-};
-
-const Choices = () => {
-
-  return (
-    <View style={styles.choicesContainer}>
-      <Text>Choices</Text>
-    </View>
-  );
-};
-
-const PlayerDeck = () => {
-  return (
-    <View style={styles.deckPlayerContainer}>
-      <Text>PlayerDeck </Text>
     </View>
   );
 };
