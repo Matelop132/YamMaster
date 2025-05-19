@@ -1,10 +1,6 @@
-// app/components/board/timers/opponent-timer.component.js
-
-// app/components/board/timers/player-timer.component.js
-import React, { useEffect, useState, useContext} from "react";
-import { View, Text, StyleSheet } from "react-native-web";
-import { SocketContext } from "../../../contexts/socket.context";
-
+import React, { useEffect, useState, useContext } from "react";
+import { View, Text, StyleSheet } from 'react-native';
+import { SocketContext } from '../../../contexts/socket.context';
 
 const OpponentTimer = () => {
     const socket = useContext(SocketContext);
@@ -23,13 +19,14 @@ const OpponentTimer = () => {
       </View>
     );
   };
-  
+
+
   const styles = StyleSheet.create({
-    playerTimerContainer: {
+    opponentTimerContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "lightgrey"
-      },
-    });
+      }
+});
+
 export default OpponentTimer;

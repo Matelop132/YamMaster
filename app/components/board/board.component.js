@@ -2,11 +2,12 @@
 
 import React from "react";
 import { View, Text, StyleSheet } from 'react-native';
-import PlayerTimer from './timer/player-timer.component'
-import OpponentTimer from './timer/opponent-timer.component'
-import PlayerDeck from './decks/player-deck.component'
-import OpponentDeck from './decks/opponent-deck.component'
+import PlayerTimer from './timers/player-timer.component'
+import OpponentTimer from './timers/opponent-timer.component'
+import PlayerDeck from "./decks/player-deck.component";
+import OpponentDeck from "./decks/opponent-deck.component";
 import Choices from "./choices/choices.component";
+import Grid from "./grid/grid.component";
 
 const OpponentInfos = () => {
   return (
@@ -20,17 +21,6 @@ const OpponentScore = () => {
   return (
     <View style={styles.opponentScoreContainer}>
       <Text>Score: </Text>
-    </View>
-  );
-};
-
-
-
-const Grid = () => {
-
-  return (
-    <View style={styles.gridContainer}>
-      <Text>Grid</Text>
     </View>
   );
 };
@@ -51,8 +41,6 @@ const PlayerScore = () => {
     </View>
   );
 };
-
-
 
 const Board = ({ gameViewState}) => {
   return (
@@ -115,11 +103,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: "lightgrey"
   },
-  opponentTimerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   opponentScoreContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -139,18 +122,6 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderColor: 'black',
   },
-  choicesContainer: {
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  deckPlayerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: 'black',
-  },
   playerInfosContainer: {
     flex: 7,
     justifyContent: 'center',
@@ -162,12 +133,6 @@ const styles = StyleSheet.create({
   playerTimerScoreContainer: {
     flex: 3,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: "lightgrey"
-  },
-  playerTimerContainer: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: "lightgrey"

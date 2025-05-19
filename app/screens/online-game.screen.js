@@ -5,6 +5,7 @@ import { StyleSheet, View, Button, Text } from "react-native";
 import { SocketContext } from '../contexts/socket.context';
 import OnlineGameController from "../controllers/online-game.controller";
 
+
 export default function OnlineGameScreen({ navigation }) {
 
     const socket = useContext(SocketContext);
@@ -23,8 +24,8 @@ export default function OnlineGameScreen({ navigation }) {
             )}
 
             {socket && (
-                <OnlineGameController navigation={navigation} />
-        )}
+                <OnlineGameController navigation={navigation}/>
+            )}
         </View>
     );
 }

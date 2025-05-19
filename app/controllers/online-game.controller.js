@@ -3,7 +3,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { SocketContext } from '../contexts/socket.context';
-import  Board  from '../components/board/board.component'
+import Board from "../components/board/board.component";
+
 
 export default function OnlineGameController({ navigation }) {
 
@@ -25,19 +26,6 @@ export default function OnlineGameController({ navigation }) {
             setInGame(data['inGame']);
         });
 
-        socket.on('queue.leave', (data) => {
-            console.log('[listen][game.start]:', data);
-            setInQueue(data['inQueue']);
-            setInGame(data['inGame']);
-            setIdOpponent(data['idOpponent']);
-        });
-        socket.on('queue.left', (data) => {
-            console.log('[listen][game.start]:', data);
-            setInQueue(data['inQueue']);
-            setInGame(data['inGame']);
-            navigation.navigate('HomeScreen')
-        });
-
         socket.on('game.start', (data) => {
             console.log('[listen][game.start]:', data);
             setInQueue(data['inQueue']);
@@ -45,7 +33,40 @@ export default function OnlineGameController({ navigation }) {
             setIdOpponent(data['idOpponent']);
         });
 
-    }, []);
+        socket.on('queue.left', (data) => {
+            console.log('[listen][queue.left]:', data);
+            setInQueue(data['inQueue']);
+            setInGame(data['inGame']);
+            navigation.navigate('HomeScreen');
+        });
+
+        socket.on('game.over', (data) => {
+            console.log('[listen][game.over]:', data);
+            if (data.isWinner) {
+                console.log('Navigation vers GameWon');
+                navigation.navigate('GameWon', {
+                    player1Score: data.player1Score,
+                    player2Score: data.player2Score
+                });
+            } else {
+                console.log('Navigation vers GameLost');
+                navigation.navigate('GameLost', {
+                    player1Score: data.player1Score,
+                    player2Score: data.player2Score
+                });
+            }
+        });
+
+        return () => {
+            if (socket) {
+                socket.off('queue.added');
+                socket.off('game.start');
+                socket.off('queue.left');
+                socket.off('game.over');
+            }
+        };
+    }, [socket, navigation]);
+
     return (
         <View style={styles.container}>
             {!inQueue && !inGame && (
@@ -61,17 +82,22 @@ export default function OnlineGameController({ navigation }) {
                     <Text style={styles.paragraph}>
                         Waiting for another player...
                     </Text>
-                    <Button
-                        title="Revenir au menu"
-                        onPress={() => socket.emit("queue.leave")}
-                    />
+                    <View>
+                        <Button
+                            title="Quittez la file d'attente"
+                            onPress={() => {socket.emit("queue.leave")}
+                            }
+                        />
+                    </View>
                 </>
             )}
 
             {inGame && (
                 <>
-                    <Board/>
+                    <Board />
                 </>
+
+
             )}
         </View>
     );

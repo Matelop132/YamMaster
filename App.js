@@ -9,6 +9,7 @@ import { SocketContext, socket } from './app/contexts/socket.context';
 import OnlineGameScreen from './app/screens/online-game.screen';
 import VsBotGameScreen from './app/screens/vs-bot-game.screen';
 
+
 const Stack = createStackNavigator();
 LogBox.ignoreAllLogs(true);
 
